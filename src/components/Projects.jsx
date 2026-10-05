@@ -71,9 +71,11 @@ function Featured({ p, index, onOpen }) {
           {p.stack.map((s) => <span className="chip small" key={s}>{s}</span>)}
         </div>
         <div className="featured-btns">
-          <a className="btn solid" href={p.live} target="_blank" rel="noreferrer">Visit site ↗</a>
+          <a className="btn solid" href={p.live} target="_blank" rel="noreferrer">{p.cta || 'Visit site ↗'}</a>
+          {p.repo && <a className="btn gold" href={p.repo} target="_blank" rel="noreferrer">Code ↗</a>}
           <button className="btn" onClick={() => onOpen(p)}>Briefing ▸</button>
         </div>
+        {p.note && <div className="featured-note">ⓘ {p.note}</div>}
       </div>
     </motion.article>
   );
@@ -153,7 +155,7 @@ function Briefing({ p, onClose }) {
         </div>
         {(p.link || p.repo) && (
           <div className="modal-links">
-            {p.link && <a className="btn solid" href={p.link} target="_blank" rel="noreferrer">Visit live site ↗</a>}
+            {p.link && <a className="btn solid" href={p.link} target="_blank" rel="noreferrer">{p.cta || 'Visit live site ↗'}</a>}
             {p.repo && <a className="btn gold" href={p.repo} target="_blank" rel="noreferrer">Source code ↗</a>}
           </div>
         )}

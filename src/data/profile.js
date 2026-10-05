@@ -15,7 +15,7 @@ export const profile = {
   github: 'https://github.com/ROTH007',
   telegram: 'https://t.me/your_username',  // ✏️ or remove
   linkedin: '',                            // ✏️ optional
-  cv: '',                                  // ✏️ optional: '/cv.pdf' (put the file in /public)
+  cv: '',                                             // ✏️ optional: '/cv.pdf' (put the file in /public)
 
   // Images in /public
   photo: '/image1.png',  // normal photo
@@ -100,14 +100,42 @@ export const skillGroups = [
 export const techCloud = [
   'React', 'Vue', 'Laravel', 'Blazor', 'C#', 'Python', 'Java', 'PHP', 'JavaScript',
   'PostgreSQL', 'MySQL', 'Oracle', 'Flask', 'Node.js', 'PyQt6', 'Tailwind', 'Git', 'Figma',
+  'TypeScript', 'Phaser', 'Colyseus',
 ];
 
 /* ---------------- Projects ---------------- */
 /* ✏️ Projects
    live:     link to the deployed site → shows a LIVE preview + "Visit site" button
    image:    optional screenshot in /public (e.g. '/projects/today.png') — used instead of the live preview
-   featured: true → shown big in "Live deployments" at the top */
+   featured: true → shown big in "Live deployments" at the top
+   cta:      text of the main button (default "Visit site ↗")
+   note:     small warning under the buttons (optional) */
 export const projects = [
+  {
+    id: 'pixel-brawl',
+    title: 'Pixel Brawl',
+    tag: 'Game',
+    year: '2026',
+    featured: true,
+    live: 'https://pixel-brawl-kw7b.onrender.com/',
+    image: '',
+    cta: 'Play now ↗',
+    note: 'Free server — the first load can take ~30–50 seconds to wake up.',
+    stack: ['TypeScript', 'Phaser 3', 'Colyseus', 'Node.js', 'Render'],
+    summary: 'Online multiplayer pixel fighting game — knock your friends off the map.',
+    details: 'Create your own pixel fighter, open a room, share the 5-letter code and battle up to 10 friends in real time. Smash-style knockback means the lower your HP, the further you fly. The server is authoritative, so nobody can cheat, and wins, matches and KOs are saved to your account.',
+    features: [
+      'Real-time multiplayer rooms (2–10 players)',
+      'Register / login with bcrypt + JWT',
+      'Character creator with live animated preview',
+      'Public room list + private rooms by code',
+      'Smash-style knockback, 3 lives, last one standing wins',
+      'Server-authoritative netcode (no cheating)',
+      'Touch controls on phones + auto-reconnect',
+      'Stats saved: wins, matches, KOs',
+    ],
+    link: 'https://pixel-brawl-kw7b.onrender.com/', repo: 'https://github.com/ROTH007/pixel-brawl',
+  },
   {
     id: 'today-web',
     title: 'TODAY Internet Website',
