@@ -13,7 +13,7 @@ export const profile = {
   focus: 'Full-stack · UI/UX · AI tools',
   email: 'sath72880@gmail.com',           // ✏️ change to your email
   github: 'https://github.com/ROTH007',
-  telegram: 'https://t.me/your_username',  // ✏️ or remove
+  telegram: 'https://t.me/OnyourLeft27',  // ✏️ or remove
   linkedin: '',                            // ✏️ optional
   cv: '',                                             // ✏️ optional: '/cv.pdf' (put the file in /public)
 
@@ -42,7 +42,7 @@ export const profile = {
 
 /* The AI assistant that greets visitors and answers commands */
 export const assistant = {
-  name: 'NOVA',                 // ✏️ give your assistant any name
+  name: 'JAVIS',                 // ✏️ give your assistant any name
   fullName: 'Neural Operations & Virtual Assistant',
   voice: true,                  // speaks out loud after the visitor presses "Enter"
   greeting: 'Welcome. All systems are online. I will be your guide through this portfolio.',
@@ -300,13 +300,17 @@ export const timeline = [
 ];
 
 /* ---------------- Achievements ---------------- */
+/* ---------------- Achievements ----------------
+   image: picture in /public (shown at the top of the card)
+   fit:   'cover' = fill the box (photos) · 'contain' = show the whole image (logos)
+   icon:  used only if there is no image */
 export const achievements = [
-  { icon: '🏢', title: 'Software Internship', text: 'Selected as a software intern at TODAY Communication Co., Ltd.', year: '2026' },
-  { icon: '🚀', title: '25+ Projects', text: 'Built more than 25 apps, systems and games across 6+ languages.', year: '2026' },
-  { icon: '💳', title: 'Real Payment Integration', text: 'Integrated KHQR / Bakong payments into my own projects.', year: '2026' },
-  { icon: '🤖', title: 'AI Game', text: 'Built a tower defense game with A* pathfinding for my AI course.', year: '2026' },
-  { icon: '🧠', title: 'Expert System', text: 'Built a PyQt6 expert system that troubleshoots computer problems.', year: '2026' },
-  { icon: '🌐', title: 'Multilingual', text: 'Khmer native, English, plus Japanese and Korean basics.', year: '—' },
+  { image: '/intern.png',         icon: '🏢', title: 'Software Internship', text: 'Selected as a software intern at TODAY Communication Co., Ltd.', year: '2026' },
+  { image: '/project.png',        icon: '🚀', title: '25+ Projects', text: 'Built more than 25 apps, systems and games across 6+ languages.', year: '2026' },
+  { image: '/khqr.png',           icon: '💳', title: 'Real Payment Integration', text: 'Integrated KHQR / Bakong payments into my own projects.', year: '2026' },
+  { image: '/aigame.png',         icon: '🤖', title: 'AI Game', text: 'Built a tower defense game with A* pathfinding for my AI course.', year: '2026' },
+  { image: '/system.png',         icon: '🧠', title: 'Expert System', text: 'Built a PyQt6 expert system that troubleshoots computer problems.', year: '2026' },
+  { image: '/multilaguage.jpg',   icon: '🌐', title: 'Multilingual', text: 'Khmer native, English, plus Japanese and Korean basics.', year: '—' },
 ];
 
 /* ---------------- Hobbies ---------------- */

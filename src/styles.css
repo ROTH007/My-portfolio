@@ -693,3 +693,23 @@ main { position: relative; z-index: 2; }
 .featured > *, .browser, .browser-url { min-width: 0; }
 
 .featured-note { margin-top: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .5px; }
+
+/* Achievement cards with an image on top */
+.ach.has-img { flex-direction: column; gap: 0; padding: 0; }
+.ach-img {
+  position: relative; width: 100%; aspect-ratio: 16 / 10; overflow: hidden;
+  border-bottom: 1px solid var(--line); background: #050b14;
+}
+.ach-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease, filter .6s; filter: saturate(.85) brightness(.9); }
+.ach-img.contain img { object-fit: contain; padding: 18px; }
+.ach-img::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(transparent 55%, rgba(4, 7, 13, .85)),
+              repeating-linear-gradient(0deg, rgba(61,224,255,.06) 0 1px, transparent 1px 4px);
+}
+.ach-img .scan-line { opacity: 0; transition: opacity .3s; }
+.ach.has-img:hover .ach-img img { transform: scale(1.07); filter: saturate(1.1) brightness(1); }
+.ach.has-img:hover .ach-img .scan-line { opacity: .6; }
+.ach.has-img:hover { border-color: rgba(255, 200, 97, .55); }
+.ach.has-img .ach-body { padding: 18px 22px 22px; }
+.ach.has-img .stamp { z-index: 2; background: rgba(4, 7, 13, .7); }

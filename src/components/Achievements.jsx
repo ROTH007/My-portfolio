@@ -18,11 +18,18 @@ export default function Achievements() {
 
       <div className="ach-grid">
         {achievements.map((a, i) => (
-          <motion.div key={a.title} className="panel ach"
+          <motion.div key={a.title} className={`panel ach ${a.image ? 'has-img' : ''}`}
             initial={{ opacity: 0, y: 30, rotateX: -30 }} whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
             viewport={{ once: true, amount: 0.3 }} transition={{ delay: (i % 3) * 0.1, duration: 0.6 }}>
-            <div className="ach-icon">{a.icon}</div>
-            <div>
+            {a.image ? (
+              <div className={`ach-img ${a.fit === 'contain' ? 'contain' : ''}`}>
+                <img src={a.image} alt={a.title} loading="lazy" />
+                <div className="scan-line" />
+              </div>
+            ) : (
+              <div className="ach-icon">{a.icon}</div>
+            )}
+            <div className="ach-body">
               <div className="yr">{a.year}</div>
               <h4>{a.title}</h4>
               <p>{a.text}</p>
