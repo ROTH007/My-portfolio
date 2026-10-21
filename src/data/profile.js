@@ -165,6 +165,63 @@ export const projects = [
     link: 'https://lotus-cinema-frontend-6xo4.vercel.app/', repo: '',
   },
   {
+    id: 'melo-music',
+    title: 'Melo Music',
+    tag: 'Web',
+    year: '2026',
+    featured: true,
+    live: 'https://melo-music-demo.vercel.app/',
+    image: '',
+    stack: ['React', 'Vercel'],                     // ✏️ check the stack
+    summary: 'Music streaming website for browsing and playing songs.',
+    details: 'The frontend of Melo Music, a music streaming website where visitors can explore songs and create playlists. Built as a responsive single-page app and deployed live on Vercel.',
+    features: ['Song listings', 'Music playback', 'Responsive single-page app', 'Live on Vercel'],
+    link: 'https://melo-music-demo.vercel.app/', repo: '',
+  },
+
+  {
+    id: 'camera-test',
+    title: 'Camera Test',
+    tag: 'Web',
+    year: '2026',
+    featured: false,
+    live: 'https://app-v2-test-six.vercel.app/',
+    image: '',
+    stack: ['React', 'Vercel'],                     // ✏️ check the stack
+    summary: 'Camera test website for trying out camera access in the browser.',
+    details: 'A test web app for checking camera functionality in the browser. Built as a single-page app and deployed live on Vercel.',
+    features: ['Camera access test', 'Live on Vercel'],  // ✏️ add the features it actually has
+    link: 'https://app-v2-test-six.vercel.app/', repo: '',  // ✏️ add the GitHub repo URL
+  },
+  {
+    id: 'pacific-rim',
+    title: 'Pacific Rim',
+    tag: 'Web',
+    year: '2026',
+    featured: false,
+    live: 'https://pacificrim-testing.vercel.app/',
+    image: '',
+    stack: ['React', 'Vercel'],                     // ✏️ check the stack
+    summary: 'Pacific Rim testing website.',         // ✏️ describe what it does
+    details: 'A testing website for the Pacific Rim project, deployed live on Vercel. ✏️ Add a short description of what the site does.',
+    features: ['Live on Vercel'],                    // ✏️ add the features
+    link: 'https://pacificrim-testing.vercel.app/', repo: '',  // ✏️ add the GitHub repo URL
+  },
+  {
+    id: 'animeweb',
+    title: 'AnimeWeb',
+    tag: 'Web',
+    year: '2026',
+    featured: true,
+    live: 'https://anime-frontend-web.vercel.app/',
+    image: '',
+    stack: ['React', 'Vite', 'Bootstrap', 'react-icons'],
+    summary: 'Anime discovery website with a featured hero carousel, search and genre filters.',
+    details: 'The frontend of AnimeWeb, a responsive single-page app for discovering anime films. Visitors can browse a featured carousel, search titles as they type, filter by genre, and open trailers. Built with React and Vite, styled with Bootstrap and a custom dark theme, and deployed live on Vercel.',
+    features: ['Featured hero carousel', 'Live search', 'Genre filter', 'Trailer links', 'Responsive dark theme', 'Live on Vercel'],
+    link: 'https://anime-frontend-web.vercel.app/', repo: '',  // ✏️ add the GitHub repo URL
+  },
+  {
     id: 'fooddesk',
     title: 'FoodDesk',
     tag: 'Full-stack',

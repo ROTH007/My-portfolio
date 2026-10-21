@@ -13,7 +13,7 @@ function LivePreview({ p, interactive = false }) {
   const boxRef = useRef(null);
   const [scale, setScale] = useState(0.4);
   const [loaded, setLoaded] = useState(false);
-  const VW = 1440, VH = 900;  // the site is rendered at desktop size, then scaled
+  const VW = 1440, VH = 760;  // the site is rendered at desktop size, then scaled (shorter = more compact rows)
 
   useEffect(() => {
     const el = boxRef.current;
