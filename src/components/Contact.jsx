@@ -32,17 +32,25 @@ export default function Contact() {
 
   return (
     <section className="section" id="contact">
-      <SectionHead index="07" title="Open a" outline="channel"
-        sub="Have a project, internship or idea? Send a transmission." />
+      <SectionHead index="07" title="Open a" outline="channel" />
+
+      <div className="contact-bar">
+        <h3>▸ READY TO DISCUSS<br /><span className="hi">YOUR PROJECT?</span></h3>
+        <div className="contact-line" />
+        <div className="contact-bar-btns">
+          <button className="btn solid" onClick={() => document.getElementById('name-field')?.focus()}>Start a conversation ▸</button>
+          <a className="btn gold" href={profile.github} target="_blank" rel="noreferrer">View GitHub ↗</a>
+        </div>
+      </div>
 
       <div className="contact-grid">
-        <motion.form className="panel terminal" onSubmit={submit} {...reveal}>
+        <motion.form className="terminal" onSubmit={submit} {...reveal}>
           <div className="term-bar"><i /><i /><i /> secure-uplink — {profile.shortName.toLowerCase()}@portfolio</div>
           <div className="term-body">
             <div><span className="prompt">➜</span> ./send_transmission --to {profile.shortName.toLowerCase()}</div>
             <div className="field">
               <label>NAME</label>
-              <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
+              <input id="name-field" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
             </div>
             <div className="field">
               <label>EMAIL</label>
@@ -59,7 +67,7 @@ export default function Contact() {
 
         <div className="links">
           {links.map((l, i) => (
-            <motion.a key={l.title} href={l.href} target="_blank" rel="noreferrer" className="panel link-card"
+            <motion.a key={l.title} href={l.href} target="_blank" rel="noreferrer" className="link-card"
               initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
               transition={{ delay: i * 0.1 }} onMouseEnter={() => sfx('hover')}>
               <span className="ic">{l.ic}</span>

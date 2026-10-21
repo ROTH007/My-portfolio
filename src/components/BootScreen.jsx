@@ -57,16 +57,12 @@ export default function BootScreen({ onDone }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
-  const R = 160, C = 2 * Math.PI * R;
-
   return (
     <motion.div
       className="boot"
-      exit={{ opacity: 0, scale: 1.15, filter: 'blur(8px)' }}
-      transition={{ duration: 0.8, ease: [0.7, 0, 0.3, 1] }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: [0.7, 0, 0.3, 1] }}
     >
-      <div className="boot-grid" />
-
       <div className="boot-meta">
         <div>{assistant.name} OS v2.6</div>
         <div>USER: {profile.shortName}</div>
@@ -75,42 +71,10 @@ export default function BootScreen({ onDone }) {
       </div>
 
       <div className="boot-core">
-        <svg viewBox="-200 -200 400 400">
-          <defs>
-            <filter id="bglow"><feGaussianBlur stdDeviation="3" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-          </defs>
-          {/* Outer tick ring */}
-          <g className="spin-rev" opacity=".55">
-            {Array.from({ length: 72 }).map((_, i) => (
-              <line key={i} x1="0" y1={-190} x2="0" y2={i % 6 ? -182 : -174}
-                stroke="#3de0ff" strokeWidth={i % 6 ? 1 : 2} transform={`rotate(${i * 5})`} />
-            ))}
-          </g>
-          {/* Dashed ring */}
-          <circle className="spin" r="140" fill="none" stroke="#3de0ff" strokeOpacity=".35" strokeWidth="6" strokeDasharray="4 10" />
-          {/* Arc segments */}
-          <g className="spin-fast" filter="url(#bglow)">
-            <circle r="120" fill="none" stroke="#ffc861" strokeWidth="3" strokeDasharray="60 694" />
-            <circle r="120" fill="none" stroke="#3de0ff" strokeWidth="3" strokeDasharray="30 724" strokeDashoffset="-380" />
-          </g>
-          {/* Progress ring */}
-          <circle r={R} fill="none" stroke="#3de0ff" strokeOpacity=".12" strokeWidth="4" />
-          <circle r={R} fill="none" stroke="#3de0ff" strokeWidth="4" filter="url(#bglow)"
-            strokeDasharray={C} strokeDashoffset={C * (1 - pct / 100)} transform="rotate(-90)"
-            style={{ transition: 'stroke-dashoffset .1s linear' }} strokeLinecap="round" />
-          {/* Inner reactor */}
-          <g className="spin-rev">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <rect key={i} x="-6" y="-92" width="12" height="22" rx="2" fill="#3de0ff" fillOpacity=".25"
-                stroke="#3de0ff" strokeOpacity=".6" transform={`rotate(${i * 36})`} />
-            ))}
-          </g>
-          <circle r="62" fill="none" stroke="#3de0ff" strokeOpacity=".4" />
-        </svg>
-
         <div className="boot-center">
           <div className="boot-percent">{pct}%</div>
           <div className="boot-name">{ready ? 'SYSTEM ONLINE' : 'LOADING'}</div>
+          <div className="boot-bar"><div style={{ width: `${pct}%` }} /></div>
           {ready && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
               <button className="btn solid boot-enter" onClick={enter} data-hover>

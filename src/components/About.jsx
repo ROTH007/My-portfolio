@@ -66,7 +66,7 @@ export default function About() {
           </div>
           <div className="stats">
             {profile.stats.map((s, i) => (
-              <motion.div key={s.label} className="panel stat" {...reveal}
+              <motion.div key={s.label} className="stat" {...reveal}
                 transition={{ ...reveal.transition, delay: 0.2 + i * 0.1 }}>
                 <Counter value={s.value} suffix={s.suffix} />
                 <span>{s.label}</span>

@@ -54,16 +54,16 @@ function LivePreview({ p, interactive = false }) {
 /* ---------- Featured live project (big card) ---------- */
 function Featured({ p, index, onOpen }) {
   return (
-    <motion.article className="panel featured brackets"
+    <motion.article className="featured"
       initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.7, delay: index * 0.12 }}>
       <div className="featured-preview" onClick={() => onOpen(p)} data-hover>
         <LivePreview p={p} />
       </div>
       <div className="featured-info">
-        <div className="proj-top">
-          <span>LIVE-{String(index + 1).padStart(2, '0')} · {p.year}</span>
-          <span className="tag">{p.tag}</span>
+        <div className="proj-top" style={{ padding: 0, border: 'none' }}>
+          <span className="chip small" style={{ background: 'var(--accent)', color: 'var(--accent-ink)', border: 'none' }}>New</span>
+          <span className="tag">{p.tag} · {p.year}</span>
         </div>
         <h3>{p.title}</h3>
         <p>{p.summary}</p>
@@ -82,28 +82,13 @@ function Featured({ p, index, onOpen }) {
 }
 
 function TiltCard({ p, index, onOpen }) {
-  const [rot, setRot] = useState({ x: 0, y: 0 });
-  const onMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-    e.currentTarget.style.setProperty('--mx', `${px * 100}%`);
-    e.currentTarget.style.setProperty('--my', `${py * 100}%`);
-    setRot({ x: (0.5 - py) * 10, y: (px - 0.5) * 12 });
-  };
   return (
     <motion.article
       layout
       initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, delay: (index % 6) * 0.05 }}
     >
-      {/* inner div does the 3D tilt, outer article does the enter/exit animation */}
-      <div
-        className="panel proj-card" data-hover
-        onMouseMove={onMove} onMouseLeave={() => setRot({ x: 0, y: 0 })}
-        style={{ transform: `perspective(900px) rotateX(${rot.x}deg) rotateY(${rot.y}deg)` }}
-        onClick={() => onOpen(p)}
-      >
-        <div className="shine" />
+      <div className="proj-card" data-hover onClick={() => onOpen(p)}>
         <div className="proj-top">
           <span>PRJ-{String(index + 1).padStart(2, '0')} · {p.year}</span>
           <span className="tag">{p.live && <span className="live-dot inline"><b />LIVE · </span>}{p.tag}</span>
@@ -113,7 +98,7 @@ function TiltCard({ p, index, onOpen }) {
         <div className="proj-stack">
           {p.stack.map((s) => <span className="chip small" key={s}>{s}</span>)}
         </div>
-        <span className="proj-open">OPEN BRIEFING ▸</span>
+        <span className="proj-open">OPEN BRIEFING <b>→</b></span>
       </div>
     </motion.article>
   );
@@ -168,16 +153,36 @@ export default function Projects() {
   const { sfx, unlock } = useSystem();
   const tags = useMemo(() => ['All', ...new Set(projects.map((p) => p.tag))], []);
   const [filter, setFilter] = useState('All');
+  const [query, setQuery] = useState('');
   const [open, setOpen] = useState(null);
-  const list = filter === 'All' ? projects : projects.filter((p) => p.tag === filter);
+  const list = projects
+    .filter((p) => filter === 'All' || p.tag === filter)
+    .filter((p) => p.title.toLowerCase().includes(query.trim().toLowerCase()));
 
   const openP = (p) => { sfx('open'); unlock('briefing'); setOpen(p); };
   const featured = projects.filter((p) => p.featured);
 
   return (
     <section className="section" id="projects">
-      <SectionHead index="03" title="Project" outline="archive"
+      <SectionHead index="03" title="Port" outline="folio"
         sub="Missions completed so far. The first ones are live — try them right here." />
+
+      <div className="proj-toolbar">
+        <span className="proj-count">Projects <b>{String(projects.length).padStart(2, '0')}</b></span>
+        <div className="tabs">
+          {tags.map((t) => (
+            <button key={t} className={`tab ${filter === t ? 'active' : ''}`}
+              onClick={() => { setFilter(t); sfx('click'); }}>
+              {filter === t && <motion.span layoutId="projtab" className="tab-bg" />}
+              <span>{t}</span>
+            </button>
+          ))}
+        </div>
+        <div className="search-box">
+          <span>⌕</span>
+          <input placeholder="Search projects..." value={query} onChange={(e) => setQuery(e.target.value)} />
+        </div>
+      </div>
 
       {featured.length > 0 && (
         <>
@@ -188,16 +193,6 @@ export default function Projects() {
           <div className="hud-label" style={{ margin: '56px 0 16px' }}>Full archive</div>
         </>
       )}
-
-      <div className="tabs">
-        {tags.map((t) => (
-          <button key={t} className={`tab ${filter === t ? 'active' : ''}`}
-            onClick={() => { setFilter(t); sfx('click'); }}>
-            {filter === t && <motion.span layoutId="projtab" className="tab-bg" />}
-            <span>{t}</span>
-          </button>
-        ))}
-      </div>
 
       <motion.div layout className="proj-grid">
         <AnimatePresence mode="popLayout">

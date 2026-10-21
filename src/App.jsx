@@ -6,7 +6,6 @@ import { AnimatePresence } from 'framer-motion';
 import { SystemProvider, useSystem } from './system';
 import { profile, assistant } from './data/profile';
 import BootScreen from './components/BootScreen';
-import HudBackground from './components/HudBackground';
 import Cursor from './components/Cursor';
 import Navbar, { SECTIONS } from './components/Navbar';
 import Hero from './components/Hero';
@@ -61,31 +60,35 @@ function Site() {
 
   return (
     <>
-      <HudBackground />
       <Cursor />
       <AnimatePresence>{!booted && <BootScreen key="boot" onDone={() => setBooted(true)} />}</AnimatePresence>
 
       {booted && <Navbar active={active} />}
-      <main>
-        <Hero booted={booted} />
+      <div className="frame">
+        <div className="grid-lines">
+          {Array.from({ length: 4 }).map((_, i) => <span key={i} style={{ animationDelay: `${i * 0.08}s` }} />)}
+        </div>
+        <main>
+          <Hero booted={booted} />
+          {booted && (
+            <>
+              <About />
+              <Skills />
+              <Projects />
+              <Timeline />
+              <Achievements />
+              <Hobbies />
+              <Contact />
+            </>
+          )}
+        </main>
         {booted && (
-          <>
-            <About />
-            <Skills />
-            <Projects />
-            <Timeline />
-            <Achievements />
-            <Hobbies />
-            <Contact />
-          </>
+          <footer className="footer">
+            <span>© {new Date().getFullYear()} {profile.shortName} · Built with React</span>
+            <span>{assistant.name} OS · UPTIME {uptime} · ALL SYSTEMS NOMINAL</span>
+          </footer>
         )}
-      </main>
-      {booted && (
-        <footer className="footer">
-          <span>© {new Date().getFullYear()} {profile.shortName} · Built with React</span>
-          <span>{assistant.name} OS · UPTIME {uptime} · ALL SYSTEMS NOMINAL</span>
-        </footer>
-      )}
+      </div>
       {booted && <Assistant />}
       <Toasts />
     </>

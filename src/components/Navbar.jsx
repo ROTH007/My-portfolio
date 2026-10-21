@@ -45,7 +45,7 @@ export default function Navbar({ active }) {
         transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
       >
         <a href="#home" className="nav-logo" onClick={(e) => go(e, 'home')}>
-          {profile.shortName}<b>//</b>OS
+          <span className="sq" />{profile.shortName}<b>//</b>OS
         </a>
         <div className={`nav-links ${open ? 'open' : ''}`}>
           {SECTIONS.map((s) => (
@@ -63,6 +63,7 @@ export default function Navbar({ active }) {
           <button className="nav-pill" onClick={() => setSoundOn(!soundOn)} title="Sound & voice">
             {soundOn ? '🔊' : '🔇'} <span className="nav-clock">{soundOn ? 'VOICE ON' : 'MUTED'}</span>
           </button>
+          <a href="#contact" className="btn solid" onClick={(e) => go(e, 'contact')} style={{ padding: '8px 16px' }}>Contact</a>
           <button className="nav-burger" onClick={() => setOpen(!open)} aria-label="Menu"><span /></button>
         </div>
       </motion.nav>

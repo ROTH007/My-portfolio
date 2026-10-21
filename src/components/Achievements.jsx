@@ -18,7 +18,7 @@ export default function Achievements() {
 
       <div className="ach-grid">
         {achievements.map((a, i) => (
-          <motion.div key={a.title} className={`panel ach ${a.image ? 'has-img' : ''}`}
+          <motion.div key={a.title} className={`ach ${a.image ? 'has-img' : ''}`}
             initial={{ opacity: 0, y: 30, rotateX: -30 }} whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
             viewport={{ once: true, amount: 0.3 }} transition={{ delay: (i % 3) * 0.1, duration: 0.6 }}>
             {a.image ? (
