@@ -237,7 +237,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
    SECTIONS (shared)
    ===================================================================== */
 main { position: relative; z-index: 2; }
-.section { position: relative; padding: 100px clamp(16px, 6vw, 72px) 64px; border-top: 1px solid var(--line); }
+.section { position: relative; padding: 100px clamp(16px, 6vw, 72px) 64px; border-top: 1px solid var(--line); max-width: 1400px; margin: 0 auto; }
 .section:first-of-type { border-top: none; }
 .section-head { margin-bottom: 40px; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
 .section-index { font-family: var(--font-mono); color: var(--accent); letter-spacing: 2px; font-size: 12px; }
