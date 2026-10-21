@@ -1,5 +1,8 @@
 /* =====================================================================
-   PROJECTS — filter tabs, 3D tilt holo-cards, "mission briefing" modal
+   PROJECTS — filter tabs, cards, "mission briefing" modal
+   Any project with a website link (live: or link:) gets a LIVE preview
+   automatically — no need for featured: true.
+   Set featured: false on a project to keep it out of "Live deployments".
    ===================================================================== */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -7,13 +10,17 @@ import SectionHead from './SectionHead';
 import { projects } from '../data/profile';
 import { useSystem } from '../system';
 
+/* The website URL of a project: uses live, or link if live is empty */
+const liveUrl = (p) => (p.live || p.link || '').trim();
+
 /* ---------- Live website preview in a browser frame ----------
    Shows the real site in a scaled-down iframe (or a screenshot if p.image is set). */
-function LivePreview({ p, interactive = false }) {
+function LivePreview({ p, interactive = false, compact = false }) {
+  const url = liveUrl(p);
   const boxRef = useRef(null);
   const [scale, setScale] = useState(0.4);
   const [loaded, setLoaded] = useState(false);
-  const VW = 1440, VH = 760;  // the site is rendered at desktop size, then scaled (shorter = more compact rows)
+  const VW = 1440, VH = compact ? 900 : 760;  // site is rendered at desktop size, then scaled down
 
   useEffect(() => {
     const el = boxRef.current;
@@ -23,9 +30,9 @@ function LivePreview({ p, interactive = false }) {
     return () => ro.disconnect();
   }, []);
 
-  const host = p.live.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const host = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
   return (
-    <div className="browser">
+    <div className={`browser ${compact ? 'compact' : ''}`}>
       <div className="browser-bar">
         <i /><i /><i />
         <span className="browser-url">🔒 {host}</span>
@@ -36,11 +43,12 @@ function LivePreview({ p, interactive = false }) {
           <img src={p.image} alt={p.title} />
         ) : (
           <>
-            {!loaded && <div className="browser-loading">ESTABLISHING LINK<span className="caret" /></div>}
+            {!loaded && <div className="browser-loading">LOADING SITE<span className="caret" /></div>}
             <iframe
               title={p.title}
-              src={p.live}
+              src={url}
               loading="lazy"
+              tabIndex={interactive ? 0 : -1}
               onLoad={() => setLoaded(true)}
               style={{ width: VW, height: VH, transform: `scale(${scale})`, pointerEvents: interactive ? 'auto' : 'none' }}
             />
@@ -62,16 +70,16 @@ function Featured({ p, index, onOpen }) {
       </div>
       <div className="featured-info">
         <div className="proj-top" style={{ padding: 0, border: 'none' }}>
-          <span className="chip small" style={{ background: 'var(--accent)', color: 'var(--accent-ink)', border: 'none' }}>New</span>
+          <span className="chip small" style={{ background: 'var(--accent)', color: 'var(--accent-ink)', border: 'none' }}>Live</span>
           <span className="tag">{p.tag} · {p.year}</span>
         </div>
         <h3>{p.title}</h3>
         <p>{p.summary}</p>
         <div className="proj-stack">
-          {p.stack.map((s) => <span className="chip small" key={s}>{s}</span>)}
+          {(p.stack || []).map((s) => <span className="chip small" key={s}>{s}</span>)}
         </div>
         <div className="featured-btns">
-          <a className="btn solid" href={p.live} target="_blank" rel="noreferrer">{p.cta || 'Visit site ↗'}</a>
+          <a className="btn solid" href={liveUrl(p)} target="_blank" rel="noreferrer">{p.cta || 'Visit site ↗'}</a>
           {p.repo && <a className="btn gold" href={p.repo} target="_blank" rel="noreferrer">Code ↗</a>}
           <button className="btn" onClick={() => onOpen(p)}>Briefing ▸</button>
         </div>
@@ -81,30 +89,46 @@ function Featured({ p, index, onOpen }) {
   );
 }
 
+/* ---------- Small card in the archive grid ---------- */
 function TiltCard({ p, index, onOpen }) {
+  const isLive = !!liveUrl(p);
   return (
     <motion.article
       layout
       initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.4, delay: (index % 6) * 0.05 }}
     >
-      <div className="proj-card" data-hover onClick={() => onOpen(p)}>
+      <div className={`proj-card ${isLive ? 'has-live' : ''}`} data-hover onClick={() => onOpen(p)}>
+        {isLive && (
+          <div className="card-preview">
+            <LivePreview p={p} compact />
+          </div>
+        )}
         <div className="proj-top">
           <span>PRJ-{String(index + 1).padStart(2, '0')} · {p.year}</span>
-          <span className="tag">{p.live && <span className="live-dot inline"><b />LIVE · </span>}{p.tag}</span>
+          <span className="tag">{isLive && <span className="live-dot inline"><b />LIVE · </span>}{p.tag}</span>
         </div>
         <h3>{p.title}</h3>
         <p>{p.summary}</p>
         <div className="proj-stack">
-          {p.stack.map((s) => <span className="chip small" key={s}>{s}</span>)}
+          {(p.stack || []).map((s) => <span className="chip small" key={s}>{s}</span>)}
         </div>
-        <span className="proj-open">OPEN BRIEFING <b>→</b></span>
+        <div className="card-actions">
+          <span className="proj-open">OPEN BRIEFING <b>→</b></span>
+          {isLive && (
+            <a className="proj-visit" href={liveUrl(p)} target="_blank" rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}>
+              VISIT ↗
+            </a>
+          )}
+        </div>
       </div>
     </motion.article>
   );
 }
 
 function Briefing({ p, onClose }) {
+  const url = liveUrl(p);
   useEffect(() => {
     const k = (e) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', k);
@@ -123,24 +147,26 @@ function Briefing({ p, onClose }) {
           </div>
           <button className="modal-close" onClick={onClose} aria-label="Close">✕</button>
         </div>
-        {p.live && (
+        {url && (
           <div style={{ marginTop: 20 }}>
             <LivePreview p={p} interactive />
             <div className="hud-label" style={{ marginTop: 8, opacity: .7 }}>Live preview — you can scroll and click inside</div>
           </div>
         )}
         <p>{p.details}</p>
-        <ul className="feat">
-          {p.features.map((f, i) => (
-            <motion.li key={f} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.07 }}>{f}</motion.li>
-          ))}
-        </ul>
+        {p.features?.length > 0 && (
+          <ul className="feat">
+            {p.features.map((f, i) => (
+              <motion.li key={f} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.07 }}>{f}</motion.li>
+            ))}
+          </ul>
+        )}
         <div className="proj-stack" style={{ marginTop: 22 }}>
-          {p.stack.map((s) => <span className="chip" key={s}>{s}</span>)}
+          {(p.stack || []).map((s) => <span className="chip" key={s}>{s}</span>)}
         </div>
-        {(p.link || p.repo) && (
+        {(url || p.repo) && (
           <div className="modal-links">
-            {p.link && <a className="btn solid" href={p.link} target="_blank" rel="noreferrer">{p.cta || 'Visit live site ↗'}</a>}
+            {url && <a className="btn solid" href={url} target="_blank" rel="noreferrer">{p.cta || 'Visit live site ↗'}</a>}
             {p.repo && <a className="btn gold" href={p.repo} target="_blank" rel="noreferrer">Source code ↗</a>}
           </div>
         )}
@@ -160,12 +186,15 @@ export default function Projects() {
     .filter((p) => p.title.toLowerCase().includes(query.trim().toLowerCase()));
 
   const openP = (p) => { sfx('open'); unlock('briefing'); setOpen(p); };
-  const featured = projects.filter((p) => p.featured);
+
+  // Every project with a website link is shown in "Live deployments"
+  // (add featured: false to a project if you want to hide it from there)
+  const featured = projects.filter((p) => liveUrl(p) && p.featured !== false);
 
   return (
     <section className="section" id="projects">
       <SectionHead index="03" title="Port" outline="folio"
-        sub="Missions completed so far. The first ones are live — try them right here." />
+        sub="Missions completed so far. The live ones run right here — try them." />
 
       <div className="proj-toolbar">
         <span className="proj-count">Projects <b>{String(projects.length).padStart(2, '0')}</b></span>
@@ -186,7 +215,7 @@ export default function Projects() {
 
       {featured.length > 0 && (
         <>
-          <div className="hud-label" style={{ marginBottom: 16 }}><span className="live-dot inline"><b /></span> Live deployments</div>
+          <div className="hud-label" style={{ marginBottom: 16 }}><span className="live-dot inline"><b /></span> Live deployments ({featured.length})</div>
           <div className="featured-list">
             {featured.map((p, i) => <Featured key={p.id} p={p} index={i} onOpen={openP} />)}
           </div>

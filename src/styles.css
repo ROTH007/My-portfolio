@@ -687,4 +687,129 @@ main { position: relative; z-index: 2; }
 .ach-img.contain img { object-fit: contain; padding: 18px; }
 .ach-img::after { content: none; }
 .ach.has-img .ach-body { padding: 16px 18px 18px; }
+
+/* =====================================================================
+   FIX: Full archive grid — responsive + live previews stay inside cards
+   ===================================================================== */
+
+/* 1) Grid: equal columns that can never be stretched by their content */
+#projects .proj-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+}
+@media (max-width: 1100px) {
+  #projects .proj-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  #projects .proj-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* 2) Each card fills its cell, never wider than it */
+#projects .proj-grid > article {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+}
+#projects .proj-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* 3) Browser preview frame: always 100% of the card, iframe clipped inside */
+#projects .browser,
+#projects .browser-view {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+#projects .browser-bar { min-width: 0; }
+#projects .browser-url {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#projects .browser-view iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0;
+  transform-origin: 0 0;
+}
+#projects .browser-view img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+/* 4) Preview at the top of small cards */
+#projects .proj-card .card-preview {
+  flex: none;
+  margin: 0;
+  pointer-events: none;
+}
+#projects .proj-card .card-preview .browser { box-shadow: none; border-left: 0; border-right: 0; border-top: 0; }
+#projects .proj-card .card-preview .browser-bar { padding: 6px 10px; }
+#projects .proj-card .card-preview .browser-url { font-size: 10px; }
+
+/* 5) Text never overflows */
+#projects .proj-card h3,
+#projects .proj-card p { overflow-wrap: anywhere; }
+#projects .proj-stack { flex-wrap: wrap; }
+
+/* 6) "OPEN BRIEFING" + "VISIT" stay INSIDE the card, pinned to the bottom */
+#projects .card-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line, #c9c9c9);
+}
+#projects .card-actions .proj-open {
+  position: static !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  width: auto !important;
+}
+#projects .proj-visit {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--accent, #ff5c1a);
+  text-decoration: none;
+  white-space: nowrap;
+}
+#projects .proj-visit:hover { text-decoration: underline; }
+
+/* 7) Featured (Live deployments) rows also responsive */
+#projects .featured { min-width: 0; }
+#projects .featured > * { min-width: 0; }
+@media (max-width: 900px) {
+  #projects .featured,
+  #projects .featured:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+  #projects .featured:nth-child(even) .featured-preview { order: 0; }
+}
+
+/* 8) Toolbar (count + tabs + search) wraps on small screens */
+#projects .proj-toolbar { flex-wrap: wrap; }
+#projects .proj-toolbar .tabs { flex-wrap: wrap; min-width: 0; }
+@media (max-width: 680px) {
+  #projects .search-box { width: 100%; }
+}
 .ach.has-img .stamp { z-index: 2; }
